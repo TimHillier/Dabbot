@@ -2,16 +2,12 @@
 let mobilenet;
 let classifier;
 let video;
-let label = 'Load and Train';
+let label = 'test';
 let ukeButton;
 let whistleButton;
 let trainButton;
 let x = 480;
-let y = 360;
-
-averageResult = []
-
-
+let y = 360; 
 function modelReady() {
   console.log('Model is ready!!!');
 }
@@ -34,78 +30,40 @@ function gotResults(error, result) {
   if (error) {
     console.error(error);
   } else {
-        // label = result;
-      //this should average it out
-      if (averageResult.length() < 10)
-      {
-          if(result == "Dab")
-          {
-              averageResult.push(1)
-          }
-          else
-          {
-              averageResult.push(-1)
-          }
-
-      }
-      else
-      {
-          sum = averageResult.reduce(add);
-          averageResult = [];
-          label = getLabel(sum);
-
-      }
-
-
-
-    //what if i averaged them?
+    label = result;
     classifier.classify(gotResults);
   }
 }
-
-function getLabel(S)
+function preload()
 {
-    if(S > 0)
-    {
-        return "Dab"
-    }
-    else
-    {
-        return "Not Dab"
-    }
-
 
 }
-
 function setup() {
   createCanvas(x, y);
-  // can.position((windowWidth - width /2),(windowHeight - height) /2);
   video = createCapture(VIDEO);
   video.hide();
   background(0);
   mobilenet = ml5.featureExtractor('MobileNet', modelReady);
   classifier = mobilenet.classification(video, videoReady);
 
-  //These 2 buttons are to add your own dabs and not dabs to the ai.
-  // ukeButton = createButton('Dab');
-  // ukeButton.position();
-  // ukeButton.mousePressed(function() {
-  //   classifier.addImage('Dab');
-  // });
-  //
-  // whistleButton = createButton('Not Dab');
-  // whistleButton.position();
-  // whistleButton.mousePressed(function() {
-  //   classifier.addImage('Not Dab');
-  // });
 
-  loadButton = createButton('Load');
-  loadButton.position();
-  loadButton.mousePressed(function() {
-    LoadData();
+  ukeButton = createButton('Dab');
+  ukeButton.mousePressed(function() {
+    classifier.addImage('Dab');
   });
 
-  trainButton = createButton('Train');
+  whistleButton = createButton('Not Dab');
+  whistleButton.mousePressed(function() {
+    classifier.addImage('Not Dab');
+  });
+
+  loadButton = createButton('load');
+  loadButton.mousePressed(function() {
+    LoadData();
+    // classifier.train(whileTraining);
+  });
+
+  trainButton = createButton('train');
   trainButton.mousePressed(function() {
     classifier.train(whileTraining);
   });
@@ -135,5 +93,3 @@ function LoadData()
     }
     print("Load Complete");
 }
-
-const add = (a,b) => a + b
