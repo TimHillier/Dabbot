@@ -2,7 +2,7 @@
 let mobilenet;
 let classifier;
 let video;
-let label = 'test';
+let label = 'Load and Train';
 let ukeButton;
 let whistleButton;
 let trainButton;
@@ -37,6 +37,7 @@ function gotResults(error, result) {
 
 function setup() {
   createCanvas(x, y);
+  // can.position((windowWidth - width /2),(windowHeight - height) /2);
   video = createCapture(VIDEO);
   video.hide();
   background(0);
@@ -44,16 +45,19 @@ function setup() {
   classifier = mobilenet.classification(video, videoReady);
 
   ukeButton = createButton('Dab');
+  ukeButton.position();
   ukeButton.mousePressed(function() {
     classifier.addImage('Dab');
   });
 
   whistleButton = createButton('Not Dab');
+  whistleButton.position();
   whistleButton.mousePressed(function() {
     classifier.addImage('Not Dab');
   });
 
   loadButton = createButton('load');
+  loadButton.position();
   loadButton.mousePressed(function() {
     LoadData();
   });
